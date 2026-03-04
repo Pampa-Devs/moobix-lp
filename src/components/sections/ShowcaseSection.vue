@@ -2,96 +2,68 @@
 import { ref, onMounted } from 'vue'
 
 const visible = ref(false)
-const sectionRef = ref(null)
-const activeFilter = ref('all')
+const el = ref(null)
 
-const filters = [
-  { id: 'all', label: 'Todos' },
-  { id: 'pc', label: 'PCs' },
-  { id: 'figure', label: 'Figures' },
-  { id: 'tech', label: 'Tech' }
+const builds = [
+  { title: 'RTX 5090 Ultimate', tier: 'HIGH END', desc: 'O máximo em performance gaming. Water cooling custom, RGB sincronizado.', color: '#00aaff' },
+  { title: 'Stealth Workstation', tier: 'WORKSTATION', desc: 'Silencioso e brutal. Para criadores de conteúdo e profissionais.', color: '#a78bfa' },
+  { title: 'RGB Infinity', tier: 'MID RANGE', desc: 'O equilíbrio perfeito entre performance e custo-benefício.', color: '#34d399' },
+  { title: 'First Build', tier: 'ENTRY LEVEL', desc: 'Seu primeiro PC gamer montado com carinho e qualidade.', color: '#f59e0b' },
 ]
-
-const items = [
-  { id: 1, type: 'pc', title: 'RTX 5090 Build', subtitle: 'High End Gaming', tier: 'HIGH END', color: '#00d4ff' },
-  { id: 2, type: 'pc', title: 'Workstation Pro', subtitle: 'Produtividade Máxima', tier: 'WORKSTATION', color: '#a78bfa' },
-  { id: 3, type: 'figure', title: 'Hot Toys Collection', subtitle: 'Marvel Series', tier: 'PREMIUM', color: '#f472b6' },
-  { id: 4, type: 'pc', title: 'RGB Infinity', subtitle: 'Mid Range Gaming', tier: 'MID RANGE', color: '#34d399' },
-  { id: 5, type: 'tech', title: 'Apple Vision Pro', subtitle: 'Realidade Mista', tier: 'TECH', color: '#e2e8f0' },
-  { id: 6, type: 'pc', title: 'Stealth Black', subtitle: 'Entry Level Power', tier: 'ENTRY', color: '#00d4ff' }
-]
-
-const filteredItems = ref(items)
-
-const setFilter = (id) => {
-  activeFilter.value = id
-  filteredItems.value = id === 'all' ? items : items.filter(i => i.type === id)
-}
 
 onMounted(() => {
-  const obs = new IntersectionObserver(
-    ([entry]) => { if (entry.isIntersecting) visible.value = true },
-    { threshold: 0.1 }
-  )
-  if (sectionRef.value) obs.observe(sectionRef.value)
+  const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) visible.value = true }, { threshold: 0.08 })
+  if (el.value) obs.observe(el.value)
 })
 </script>
 
 <template>
-  <section id="showcase" class="showcase section" ref="sectionRef">
-    <div class="container">
-      <div class="showcase__header" :class="{ visible }">
-        <span class="section__label">// galeria</span>
-        <h2 class="section__title">
-          Builds que falam<br />
-          <span class="neon-text">por si só.</span>
-        </h2>
+  <section id="showcase" class="showcase section" ref="el">
+    <!-- Full-width featured build -->
+    <div class="showcase__hero reveal" :class="{ visible }">
+      <div class="showcase__hero-bg">
+        <div class="showcase__hero-grid"></div>
       </div>
-
-      <div class="showcase__filters" :class="{ visible }">
-        <button
-          v-for="f in filters"
-          :key="f.id"
-          class="showcase__filter"
-          :class="{ active: activeFilter === f.id }"
-          @click="setFilter(f.id)"
-        >
-          {{ f.label }}
-        </button>
-      </div>
-
-      <div class="showcase__grid">
-        <div
-          v-for="(item, i) in filteredItems"
-          :key="item.id"
-          class="showcase-card"
-          :class="{ visible }"
-          :style="{ '--delay': `${i * 0.1}s`, '--accent': item.color }"
-        >
-          <div class="showcase-card__visual">
-            <div class="showcase-card__placeholder">
-              <div class="showcase-card__pattern"></div>
-              <span class="showcase-card__emoji">
-                {{ item.type === 'pc' ? '🖥️' : item.type === 'figure' ? '🦸' : '🥽' }}
-              </span>
-            </div>
-            <div class="showcase-card__badge">{{ item.tier }}</div>
-          </div>
-          <div class="showcase-card__info">
-            <h3>{{ item.title }}</h3>
-            <p>{{ item.subtitle }}</p>
-          </div>
+      <div class="container">
+        <div class="showcase__hero-content">
+          <span class="section-label">Destaque</span>
+          <h2 class="heading-lg">Builds que<br />falam por si.</h2>
+          <p class="body-text">
+            Cada máquina é uma obra de engenharia. 
+            Com vídeo profissional de entrega incluso.
+          </p>
+          <a href="https://instagram.com/moobixofficial" target="_blank" class="btn btn--ghost" rel="noopener">
+            Ver no Instagram
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+          </a>
         </div>
       </div>
+    </div>
 
-      <div class="showcase__cta" :class="{ visible }">
-        <p>Quer ver mais? Segue a gente no Instagram.</p>
-        <a href="https://instagram.com/moobixofficial" target="_blank" rel="noopener" class="btn btn--outline">
-          @moobixofficial
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M7 17L17 7M17 7H7M17 7v10"/>
-          </svg>
-        </a>
+    <!-- Build cards -->
+    <div class="container">
+      <div class="showcase__grid">
+        <div
+          v-for="(b, i) in builds"
+          :key="i"
+          class="build reveal"
+          :class="[`stagger-${i + 1}`, { visible }]"
+        >
+          <div class="build__visual">
+            <div class="build__pattern" :style="{ '--c': b.color }"></div>
+            <span class="build__tier" :style="{ color: b.color }">{{ b.tier }}</span>
+          </div>
+          <div class="build__info">
+            <h3 class="build__title">{{ b.title }}</h3>
+            <p class="build__desc">{{ b.desc }}</p>
+          </div>
+          <div class="build__footer">
+            <a href="#contato" class="build__link">
+              Orçamento
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -101,62 +73,40 @@ onMounted(() => {
 @use '../../styles/variables' as *;
 
 .showcase {
-  background: $deep-black;
+  padding: $spacing-2xl 0;
+  background: $black;
 
-  &__header {
-    margin-bottom: $spacing-md;
-    opacity: 0;
-    transform: translateY(25px);
-    transition: all 0.7s ease;
+  &__hero {
+    position: relative;
+    padding: $spacing-xl 0;
+    margin-bottom: $spacing-xl;
 
-    &.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  &__filters {
-    display: flex;
-    gap: 0.5rem;
-    margin-bottom: $spacing-md;
-    opacity: 0;
-    transform: translateY(15px);
-    transition: all 0.6s ease 0.2s;
-
-    &.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  &__filter {
-    font-family: $mono;
-    font-size: $font-size-xs;
-    font-weight: 500;
-    color: $gray;
-    background: $surface;
-    border: 1px solid $border;
-    padding: 0.5rem 1.2rem;
-    border-radius: $radius-full;
-    transition: all $transition-base;
-    letter-spacing: 0.03em;
-    cursor: pointer;
-
-    &:hover {
-      color: $neon-blue;
-      border-color: rgba($neon-blue, 0.3);
+    &-bg {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
     }
 
-    &.active {
-      background: rgba($neon-blue, 0.1);
-      color: $neon-blue;
-      border-color: rgba($neon-blue, 0.4);
+    &-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba($white, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba($white, 0.02) 1px, transparent 1px);
+      background-size: 80px 80px;
+      mask-image: radial-gradient(ellipse at 50% 50%, black 20%, transparent 75%);
+    }
+
+    &-content {
+      position: relative;
+      z-index: 1;
+      max-width: 560px;
     }
   }
 
   &__grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 1.5rem;
 
     @media (max-width: $desktop) {
@@ -167,113 +117,82 @@ onMounted(() => {
       grid-template-columns: 1fr;
     }
   }
-
-  &__cta {
-    text-align: center;
-    margin-top: $spacing-lg;
-    opacity: 0;
-    transition: all 0.6s ease 0.4s;
-
-    &.visible {
-      opacity: 1;
-    }
-
-    p {
-      color: $gray;
-      font-size: $font-size-sm;
-      margin-bottom: $spacing-sm;
-    }
-  }
 }
 
-.showcase-card {
-  border-radius: $radius-lg;
-  overflow: hidden;
-  background: $surface;
+.build {
+  background: $surface-card;
   border: 1px solid $border;
-  transition: all 0.4s ease;
-  opacity: 0;
-  transform: translateY(25px);
-
-  &.visible {
-    opacity: 1;
-    transform: translateY(0);
-    transition-delay: var(--delay);
-  }
+  overflow: hidden;
+  transition: all $transition-base;
+  display: flex;
+  flex-direction: column;
 
   &:hover {
-    border-color: var(--accent);
+    border-color: $border-hover;
     transform: translateY(-3px);
 
-    .showcase-card__placeholder {
-      transform: scale(1.03);
-    }
+    .build__pattern { transform: scale(1.05); }
+    .build__link { color: $white; }
   }
 
   &__visual {
+    aspect-ratio: 4 / 3;
     position: relative;
-    aspect-ratio: 16/10;
     overflow: hidden;
-  }
-
-  &__placeholder {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, rgba($surface-elevated, 1), rgba($neon-blue, 0.05));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.5s ease;
-    position: relative;
+    background: $surface;
   }
 
   &__pattern {
     position: absolute;
     inset: 0;
-    background-image:
-      radial-gradient(circle at 30% 40%, rgba(var(--accent), 0.06) 0%, transparent 50%),
-      linear-gradient(rgba($neon-blue, 0.02) 1px, transparent 1px),
-      linear-gradient(90deg, rgba($neon-blue, 0.02) 1px, transparent 1px);
-    background-size: 100%, 20px 20px, 20px 20px;
+    background:
+      radial-gradient(circle at 50% 60%, var(--c, $accent), transparent 60%);
+    opacity: 0.08;
+    transition: transform $transition-slow;
   }
 
-  &__emoji {
-    font-size: 3rem;
-    position: relative;
-    z-index: 1;
-    filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.3));
-  }
-
-  &__badge {
+  &__tier {
     position: absolute;
-    top: 0.75rem;
-    left: 0.75rem;
-    font-family: $mono;
-    font-size: 0.6rem;
-    font-weight: 700;
-    color: var(--accent);
-    background: rgba($black, 0.7);
-    backdrop-filter: blur(10px);
-    padding: 0.3rem 0.7rem;
-    border-radius: $radius-full;
+    top: 1rem;
+    left: 1rem;
+    font-family: $font-mono;
+    font-size: $font-size-xs;
+    font-weight: 600;
     letter-spacing: 0.15em;
-    border: 1px solid rgba(255, 255, 255, 0.06);
   }
 
   &__info {
-    padding: 1.2rem 1.5rem;
+    padding: 1.5rem 1.5rem 1rem;
+    flex: 1;
+  }
 
-    h3 {
-      font-size: $font-size-base;
-      font-weight: 700;
-      color: $white;
-      margin-bottom: 0.2rem;
-    }
+  &__title {
+    font-family: $font-display;
+    font-size: $font-size-lg;
+    font-weight: 600;
+    color: $white;
+    margin-bottom: 0.4rem;
+  }
 
-    p {
-      font-size: $font-size-sm;
-      color: $gray;
-    }
+  &__desc {
+    font-size: $font-size-sm;
+    color: $gray-500;
+    line-height: 1.65;
+  }
+
+  &__footer {
+    padding: 0 1.5rem 1.5rem;
+  }
+
+  &__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: $font-size-sm;
+    font-weight: 500;
+    color: $gray-400;
+    transition: all $transition-base;
+    text-decoration: none;
   }
 }
 </style>

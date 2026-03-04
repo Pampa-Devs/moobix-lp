@@ -10,7 +10,7 @@ import FooterSection from './components/sections/FooterSection.vue'
 </script>
 
 <template>
-  <div class="moobix-app">
+  <div class="moobix">
     <Nav />
     <main>
       <HeroSection />
@@ -27,13 +27,10 @@ import FooterSection from './components/sections/FooterSection.vue'
 <style lang="scss">
 @use './styles/global.scss';
 
-.moobix-app {
+.moobix {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-
-  main {
-    flex: 1;
-  }
+  main { flex: 1; }
 }
 </style>

@@ -4,48 +4,37 @@ import { ref, onMounted, onUnmounted } from 'vue'
 const scrolled = ref(false)
 const menuOpen = ref(false)
 
-const handleScroll = () => {
-  scrolled.value = window.scrollY > 50
-}
-
-const toggleMenu = () => {
+const onScroll = () => { scrolled.value = window.scrollY > 60 }
+const toggle = () => {
   menuOpen.value = !menuOpen.value
-  if (menuOpen.value) {
-    document.body.style.overflow = 'hidden'
-  } else {
-    document.body.style.overflow = ''
-  }
+  document.body.style.overflow = menuOpen.value ? 'hidden' : ''
 }
-
-const closeMenu = () => {
+const close = () => {
   menuOpen.value = false
   document.body.style.overflow = ''
 }
 
-onMounted(() => window.addEventListener('scroll', handleScroll))
-onUnmounted(() => window.removeEventListener('scroll', handleScroll))
+onMounted(() => window.addEventListener('scroll', onScroll))
+onUnmounted(() => window.removeEventListener('scroll', onScroll))
 </script>
 
 <template>
-  <nav class="nav" :class="{ 'nav--scrolled': scrolled }">
+  <nav class="nav" :class="{ scrolled }">
     <div class="nav__inner">
-      <a href="#home" class="nav__logo" @click="closeMenu">
-        <span class="nav__logo-icon">⬡</span>
-        <span class="nav__logo-text">moobix</span>
+      <a href="#home" class="nav__logo" @click="close">
+        <span class="nav__wordmark">MOOBIX</span>
       </a>
 
-      <div class="nav__links" :class="{ 'nav__links--open': menuOpen }">
-        <a href="#categorias" @click="closeMenu">Produtos</a>
-        <a href="#showcase" @click="closeMenu">Galeria</a>
-        <a href="#servicos" @click="closeMenu">Serviços</a>
-        <a href="#tech" @click="closeMenu">Tech</a>
-        <a href="#contato" class="btn btn--primary" @click="closeMenu">Fale Conosco</a>
+      <div class="nav__menu" :class="{ open: menuOpen }">
+        <a href="#categorias" @click="close">Produtos</a>
+        <a href="#showcase" @click="close">Galeria</a>
+        <a href="#servicos" @click="close">Serviços</a>
+        <a href="#tech" @click="close">Tecnologia</a>
+        <a href="#contato" @click="close" class="nav__cta">Contato</a>
       </div>
 
-      <button class="nav__hamburger" :class="{ active: menuOpen }" @click="toggleMenu" aria-label="Menu">
-        <span></span>
-        <span></span>
-        <span></span>
+      <button class="nav__toggle" :class="{ open: menuOpen }" @click="toggle" aria-label="Menu">
+        <span></span><span></span>
       </button>
     </div>
   </nav>
@@ -60,131 +49,102 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll))
   left: 0;
   right: 0;
   z-index: 100;
-  padding: 1.2rem 0;
+  padding: 1.4rem 0;
   transition: all $transition-base;
 
-  &--scrolled {
-    background: rgba($deep-black, 0.88);
-    backdrop-filter: blur(24px) saturate(1.2);
+  &.scrolled {
+    background: rgba($true-black, 0.92);
+    backdrop-filter: blur(30px) saturate(1.3);
+    padding: 0.9rem 0;
     border-bottom: 1px solid $border;
-    padding: 0.7rem 0;
   }
 
   &__inner {
     max-width: $xl-desktop;
     margin: 0 auto;
-    padding: 0 $spacing-md;
+    padding: 0 clamp(1.5rem, 4vw, 4rem);
     display: flex;
     align-items: center;
     justify-content: space-between;
-
-    @media (max-width: $tablet) {
-      padding: 0 $spacing-sm;
-    }
   }
 
   &__logo {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    text-decoration: none;
     z-index: 101;
-
-    &-icon {
-      font-size: 1.6rem;
-      color: $neon-blue;
-      filter: drop-shadow(0 0 8px $accent-glow);
-      line-height: 1;
-    }
-
-    &-text {
-      font-family: $font-family;
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: $white;
-      letter-spacing: -0.02em;
-    }
+    text-decoration: none;
   }
 
-  &__links {
+  &__wordmark {
+    font-family: $font-display;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: $white;
+    letter-spacing: 0.18em;
+  }
+
+  &__menu {
     display: flex;
     align-items: center;
-    gap: 2.5rem;
+    gap: 2.8rem;
 
-    a:not(.btn) {
+    a {
       font-size: $font-size-sm;
-      font-weight: 500;
-      color: $gray;
+      font-weight: 400;
+      color: $gray-300;
       transition: color $transition-fast;
       letter-spacing: 0.01em;
 
-      &:hover {
-        color: $neon-blue;
-      }
-    }
-
-    .btn {
-      padding: 0.6rem 1.5rem;
-      font-size: $font-size-sm;
+      &:hover { color: $white; }
     }
 
     @media (max-width: $desktop) {
       position: fixed;
       inset: 0;
-      background: rgba($deep-black, 0.97);
-      backdrop-filter: blur(30px);
+      background: $true-black;
       flex-direction: column;
       justify-content: center;
-      gap: 2rem;
-      transform: translateX(100%);
-      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      align-items: center;
+      gap: 2.5rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
 
-      &--open {
-        transform: translateX(0);
+      &.open {
+        opacity: 1;
+        pointer-events: all;
       }
 
-      a:not(.btn) {
+      a {
         font-size: $font-size-2xl;
-        font-weight: 600;
+        font-weight: 500;
         color: $white;
-      }
-
-      .btn {
-        font-size: $font-size-lg;
-        padding: 1rem 2.5rem;
       }
     }
   }
 
-  &__hamburger {
+  &__cta {
+    color: $white !important;
+    font-weight: 500 !important;
+  }
+
+  &__toggle {
     display: none;
     flex-direction: column;
-    gap: 5px;
-    padding: 4px;
+    gap: 6px;
+    padding: 6px;
     z-index: 101;
 
-    @media (max-width: $desktop) {
-      display: flex;
-    }
+    @media (max-width: $desktop) { display: flex; }
 
     span {
-      width: 24px;
-      height: 2px;
+      width: 22px;
+      height: 1.5px;
       background: $white;
-      border-radius: 2px;
       transition: all $transition-base;
     }
 
-    &.active {
-      span:nth-child(1) {
-        transform: rotate(45deg) translate(5px, 5px);
-      }
-      span:nth-child(2) {
-        opacity: 0;
-      }
-      span:nth-child(3) {
-        transform: rotate(-45deg) translate(5px, -5px);
-      }
+    &.open {
+      span:first-child { transform: rotate(45deg) translate(2.5px, 2.5px); }
+      span:last-child { transform: rotate(-45deg) translate(2.5px, -2.5px); }
     }
   }
 }

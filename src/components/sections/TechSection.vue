@@ -2,67 +2,51 @@
 import { ref, onMounted } from 'vue'
 
 const visible = ref(false)
-const sectionRef = ref(null)
+const el = ref(null)
 
-const brands = [
-  { name: 'NVIDIA', icon: '🟢' },
-  { name: 'AMD', icon: '🔴' },
-  { name: 'Intel', icon: '🔵' },
-  { name: 'MSI', icon: '⚡' },
-  { name: 'Corsair', icon: '🎮' },
-  { name: 'ASUS', icon: '💎' },
-  { name: 'Porsche Design', icon: '🏎️' },
-  { name: 'Apple', icon: '🍎' },
-  { name: 'Meta', icon: '🥽' },
-  { name: 'Hot Toys', icon: '🦸' }
-]
+const brands = ['NVIDIA', 'AMD', 'Intel', 'MSI', 'ASUS', 'Corsair', 'Porsche Design', 'Apple', 'Meta', 'Hot Toys']
 
 const specs = [
-  { label: 'RTX 5090 / 5080 / 5070', desc: 'Última geração NVIDIA' },
-  { label: 'DDR5 até 128GB', desc: 'Memória de alta velocidade' },
-  { label: 'SSD NVMe Gen5', desc: 'Armazenamento ultrarrápido' },
-  { label: 'Custom Water Cooling', desc: 'Refrigeração líquida personalizada' }
+  { label: 'GeForce RTX 50 Series', note: 'Última geração NVIDIA — 5090 / 5080 / 5070' },
+  { label: 'DDR5 até 128GB', note: 'Memória de velocidade extrema para workloads pesados' },
+  { label: 'NVMe Gen5 SSD', note: 'Armazenamento ultrarrápido — até 14.000 MB/s' },
+  { label: 'Custom Liquid Cooling', note: 'Refrigeração líquida personalizada sob medida' },
 ]
 
 onMounted(() => {
-  const obs = new IntersectionObserver(
-    ([entry]) => { if (entry.isIntersecting) visible.value = true },
-    { threshold: 0.1 }
-  )
-  if (sectionRef.value) obs.observe(sectionRef.value)
+  const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) visible.value = true }, { threshold: 0.1 })
+  if (el.value) obs.observe(el.value)
 })
 </script>
 
 <template>
-  <section id="tech" class="tech section" ref="sectionRef">
+  <section id="tech" class="tech section" ref="el">
     <div class="container">
-      <div class="tech__header" :class="{ visible }">
-        <span class="section__label">// tecnologia</span>
-        <h2 class="section__title">
-          Só trabalhamos com<br />
-          <span class="neon-text">o que há de melhor.</span>
+      <div class="tech__head reveal" :class="{ visible }">
+        <span class="section-label">Tecnologia</span>
+        <h2 class="heading-lg">
+          Componentes<br />
+          de referência.
         </h2>
       </div>
 
-      <div class="tech__content" :class="{ visible }">
-        <div class="tech__brands">
-          <div v-for="(b, i) in brands" :key="i" class="tech__brand" :style="{ '--delay': `${i * 0.06}s` }">
-            <span class="tech__brand-icon">{{ b.icon }}</span>
-            <span class="tech__brand-name">{{ b.name }}</span>
+      <!-- Specs -->
+      <div class="tech__specs reveal" :class="{ visible }">
+        <div v-for="(s, i) in specs" :key="i" class="spec" :class="`stagger-${i + 1}`">
+          <div class="spec__indicator">
+            <div class="spec__dot"></div>
+          </div>
+          <div>
+            <h4 class="spec__label">{{ s.label }}</h4>
+            <p class="spec__note">{{ s.note }}</p>
           </div>
         </div>
+      </div>
 
-        <div class="tech__specs">
-          <div v-for="(s, i) in specs" :key="i" class="tech__spec" :style="{ '--delay': `${i * 0.1 + 0.3}s` }">
-            <div class="tech__spec-indicator">
-              <div class="tech__spec-dot"></div>
-              <div class="tech__spec-line" v-if="i < specs.length - 1"></div>
-            </div>
-            <div class="tech__spec-content">
-              <h4>{{ s.label }}</h4>
-              <p>{{ s.desc }}</p>
-            </div>
-          </div>
+      <!-- Brands marquee -->
+      <div class="tech__brands reveal" :class="{ visible }">
+        <div class="tech__brands-track">
+          <span v-for="(b, i) in [...brands, ...brands]" :key="i" class="tech__brand">{{ b }}</span>
         </div>
       </div>
     </div>
@@ -73,133 +57,94 @@ onMounted(() => {
 @use '../../styles/variables' as *;
 
 .tech {
-  background: $deep-black;
+  padding: $spacing-2xl 0;
+  background: $surface;
 
-  &__header {
+  &__head {
     margin-bottom: $spacing-lg;
-    opacity: 0;
-    transform: translateY(25px);
-    transition: all 0.7s ease;
-
-    &.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
   }
 
-  &__content {
+  &__specs {
     display: grid;
-    grid-template-columns: 1.2fr 0.8fr;
-    gap: $spacing-lg;
-    align-items: start;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.7s ease 0.2s;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    margin-bottom: $spacing-xl;
+    border-top: 1px solid $border;
 
-    &.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    @media (max-width: $desktop) {
+    @media (max-width: $tablet) {
       grid-template-columns: 1fr;
-      gap: $spacing-md;
     }
   }
 
   &__brands {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 1rem;
+    overflow: hidden;
+    padding: $spacing-md 0;
+    border-top: 1px solid $border;
+    border-bottom: 1px solid $border;
 
-    @media (max-width: $tablet) {
-      grid-template-columns: repeat(3, 1fr);
-    }
-
-    @media (max-width: $mobile) {
-      grid-template-columns: repeat(2, 1fr);
+    &-track {
+      display: flex;
+      gap: 4rem;
+      animation: marquee 30s linear infinite;
+      width: max-content;
     }
   }
 
   &__brand {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 1.5rem 1rem;
-    background: $surface;
-    border: 1px solid $border;
-    border-radius: $radius-md;
-    transition: all 0.3s ease;
-    transition-delay: var(--delay);
+    font-family: $font-display;
+    font-size: $font-size-sm;
+    font-weight: 600;
+    color: $gray-600;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+}
 
-    &:hover {
-      border-color: rgba($neon-blue, 0.3);
-      transform: translateY(-2px);
-    }
+.spec {
+  display: flex;
+  gap: 1.2rem;
+  padding: 2rem;
+  border-bottom: 1px solid $border;
 
-    &-icon {
-      font-size: 1.5rem;
-    }
+  &:nth-child(odd) {
+    border-right: 1px solid $border;
 
-    &-name {
-      font-family: $mono;
-      font-size: $font-size-xs;
-      font-weight: 600;
-      color: $gray;
-      letter-spacing: 0.05em;
+    @media (max-width: $tablet) {
+      border-right: none;
     }
   }
 
-  &__specs {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
+  &__indicator {
+    padding-top: 0.5rem;
+    flex-shrink: 0;
   }
 
-  &__spec {
-    display: flex;
-    gap: 1.2rem;
-    transition-delay: var(--delay);
-
-    &-indicator {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding-top: 0.3rem;
-    }
-
-    &-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: $neon-blue;
-      box-shadow: 0 0 12px $accent-glow;
-      flex-shrink: 0;
-    }
-
-    &-line {
-      width: 1px;
-      flex: 1;
-      min-height: 30px;
-      background: rgba($neon-blue, 0.15);
-    }
-
-    &-content {
-      padding-bottom: 2rem;
-
-      h4 {
-        font-size: $font-size-base;
-        font-weight: 700;
-        color: $white;
-        margin-bottom: 0.2rem;
-      }
-
-      p {
-        font-size: $font-size-sm;
-        color: $gray;
-      }
-    }
+  &__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: $accent;
   }
+
+  &__label {
+    font-family: $font-display;
+    font-size: $font-size-lg;
+    font-weight: 600;
+    color: $white;
+    margin-bottom: 0.3rem;
+  }
+
+  &__note {
+    font-size: $font-size-sm;
+    color: $gray-500;
+    line-height: 1.6;
+  }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 </style>

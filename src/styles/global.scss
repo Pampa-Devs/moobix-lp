@@ -15,8 +15,8 @@ html {
 }
 
 body {
-  font-family: $font-family;
-  background-color: $black;
+  font-family: $font-body;
+  background-color: $true-black;
   color: $white;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
@@ -30,76 +30,81 @@ a {
   transition: color $transition-fast;
 }
 
-ul, ol {
-  list-style: none;
-}
-
-img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
-
-button {
-  font-family: inherit;
-  cursor: pointer;
-  border: none;
-  background: none;
-}
+ul, ol { list-style: none; }
+img { max-width: 100%; height: auto; display: block; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
 
 // Container
 .container {
   width: 100%;
   max-width: $xl-desktop;
   margin: 0 auto;
-  padding: 0 $spacing-md;
-
-  @media (max-width: $tablet) {
-    padding: 0 $spacing-sm;
-  }
+  padding: 0 clamp(1.5rem, 4vw, 4rem);
 }
 
-// Neon glow text
-.neon-text {
-  color: $neon-blue;
-  text-shadow: 0 0 10px $accent-glow, 0 0 40px rgba($neon-blue, 0.2);
-}
-
-// Button styles
+// Buttons — Porsche-style clean
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: $spacing-xs;
-  padding: 0.85rem 2rem;
-  font-size: $font-size-base;
+  gap: 0.6rem;
+  font-family: $font-body;
   font-weight: 600;
-  font-family: $font-family;
-  border-radius: $radius-full;
+  letter-spacing: 0.02em;
   transition: all $transition-base;
   cursor: pointer;
-  letter-spacing: 0.02em;
+  position: relative;
 
   &--primary {
-    background: $neon-blue;
-    color: $black;
+    background: $white;
+    color: $true-black;
+    padding: 0.9rem 2.2rem;
+    font-size: $font-size-sm;
+    border: none;
 
     &:hover {
-      background: $accent;
-      transform: translateY(-2px);
-      box-shadow: 0 8px 30px $accent-glow;
+      background: $gray-100;
+      transform: translateY(-1px);
+    }
+  }
+
+  &--ghost {
+    background: transparent;
+    color: $white;
+    padding: 0.9rem 0;
+    font-size: $font-size-sm;
+    border: none;
+    border-bottom: 1px solid rgba($white, 0.3);
+
+    &:hover {
+      border-bottom-color: $white;
     }
   }
 
   &--outline {
     background: transparent;
-    color: $neon-blue;
-    border: 1.5px solid rgba($neon-blue, 0.4);
+    color: $white;
+    padding: 0.85rem 2rem;
+    font-size: $font-size-sm;
+    border: 1px solid rgba($white, 0.2);
 
     &:hover {
-      background: rgba($neon-blue, 0.08);
-      border-color: $neon-blue;
-      transform: translateY(-2px);
+      border-color: rgba($white, 0.5);
+      background: rgba($white, 0.04);
+    }
+  }
+
+  &--accent {
+    background: $accent;
+    color: $true-black;
+    padding: 0.9rem 2.2rem;
+    font-size: $font-size-sm;
+    border: none;
+    font-weight: 700;
+
+    &:hover {
+      background: $accent-hover;
+      transform: translateY(-1px);
     }
   }
 }
@@ -108,46 +113,66 @@ button {
 .section {
   position: relative;
   overflow: hidden;
-  padding: $spacing-xl 0;
-
-  @media (max-width: $tablet) {
-    padding: $spacing-lg 0;
-  }
 }
 
-.section__label {
-  display: inline-flex;
-  align-items: center;
-  gap: $spacing-xs;
-  font-family: $mono;
+// Eyebrow / label — MSI-inspired tech label
+.section-label {
+  display: inline-block;
+  font-family: $font-mono;
   font-size: $font-size-xs;
   font-weight: 500;
-  color: $neon-blue;
+  color: $gray-400;
   text-transform: uppercase;
-  letter-spacing: 0.15em;
-  margin-bottom: $spacing-sm;
+  letter-spacing: 0.2em;
+  margin-bottom: 1.5rem;
 }
 
-.section__title {
-  font-size: clamp($font-size-3xl, 4vw, $font-size-4xl);
-  font-weight: 800;
+// Headings — editorial Porsche-style
+.heading-xl {
+  font-family: $font-display;
+  font-size: $font-size-hero;
+  font-weight: 700;
+  line-height: 1.0;
+  letter-spacing: -0.03em;
   color: $white;
-  line-height: 1.15;
-  margin-bottom: $spacing-sm;
 }
 
-.section__subtitle {
+.heading-lg {
+  font-family: $font-display;
+  font-size: clamp($font-size-3xl, 4.5vw, $font-size-5xl);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  color: $white;
+}
+
+.heading-md {
+  font-family: $font-display;
+  font-size: $font-size-2xl;
+  font-weight: 600;
+  line-height: 1.2;
+  color: $white;
+}
+
+.body-text {
   font-size: $font-size-lg;
-  color: $gray;
-  max-width: 600px;
-  line-height: 1.7;
+  color: $gray-400;
+  line-height: 1.75;
+  max-width: 520px;
+}
+
+// Divider line — MSI style
+.divider {
+  width: 100%;
+  height: 1px;
+  background: $border;
 }
 
 // Reveal animations
 .reveal {
   opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
+  transform: translateY(40px);
+  transition: opacity 0.8s $transition-slow, transform 0.8s $transition-slow;
 
   &.visible {
     opacity: 1;
@@ -155,18 +180,9 @@ button {
   }
 }
 
-// Keyframes
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-15px); }
-}
-
-@keyframes pulse-glow {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 0.8; }
-}
-
-@keyframes scan-line {
-  0% { top: -10%; }
-  100% { top: 110%; }
+// Stagger children
+@for $i from 1 through 8 {
+  .stagger-#{$i} {
+    transition-delay: #{$i * 0.08}s;
+  }
 }

@@ -1,108 +1,65 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-
-const visible = ref(false)
-onMounted(() => {
-  setTimeout(() => { visible.value = true }, 100)
-})
+const loaded = ref(false)
+onMounted(() => { setTimeout(() => { loaded.value = true }, 150) })
 </script>
 
 <template>
   <section id="home" class="hero">
-    <div class="hero__bg">
-      <div class="hero__grid"></div>
-      <div class="hero__glow hero__glow--1"></div>
-      <div class="hero__glow hero__glow--2"></div>
-      <div class="hero__scanline"></div>
+    <!-- Background atmosphere -->
+    <div class="hero__backdrop">
+      <div class="hero__gradient-top"></div>
+      <div class="hero__gradient-bottom"></div>
     </div>
 
-    <div class="hero__content" :class="{ visible }">
-      <div class="hero__text">
-        <div class="hero__badge">
-          <span class="hero__badge-dot"></span>
-          Novidades toda semana
-        </div>
-
-        <h1 class="hero__title">
-          Seu setup dos
-          <span class="neon-text">sonhos</span>
-          começa aqui.
-        </h1>
-
-        <p class="hero__subtitle">
-          PCs personalizados de alta performance, figures colecionáveis, 
-          tech de ponta e acessórios — tudo em um só lugar.
-        </p>
-
-        <div class="hero__stats">
-          <div class="hero__stat">
-            <span class="hero__stat-value">500+</span>
-            <span class="hero__stat-label">PCs montados</span>
-          </div>
-          <div class="hero__stat-divider"></div>
-          <div class="hero__stat">
-            <span class="hero__stat-value">100%</span>
-            <span class="hero__stat-label">Personalizado</span>
-          </div>
-          <div class="hero__stat-divider"></div>
-          <div class="hero__stat">
-            <span class="hero__stat-value">⭐</span>
-            <span class="hero__stat-label">Garantia real</span>
-          </div>
-        </div>
-
-        <div class="hero__actions">
-          <a href="#contato" class="btn btn--primary">
-            Monte seu PC
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
-          </a>
-          <a href="#showcase" class="btn btn--outline">
-            Ver galeria
-          </a>
-        </div>
+    <!-- Main content -->
+    <div class="hero__content" :class="{ loaded }">
+      <div class="hero__eyebrow">
+        <div class="hero__line"></div>
+        <span>Custom PC · Figures · Tech</span>
       </div>
 
-      <div class="hero__visual">
-        <div class="hero__card">
-          <div class="hero__card-content">
-            <div class="hero__card-icon">🖥️</div>
-            <div class="hero__card-label">CUSTOM BUILD</div>
-            <div class="hero__card-specs">
-              <div class="spec-line">
-                <span class="spec-dot"></span>
-                <span>RTX 50 Series</span>
-              </div>
-              <div class="spec-line">
-                <span class="spec-dot"></span>
-                <span>Intel / AMD</span>
-              </div>
-              <div class="spec-line">
-                <span class="spec-dot"></span>
-                <span>Custom RGB</span>
-              </div>
-            </div>
-          </div>
-          <div class="hero__card-glow"></div>
-        </div>
+      <h1 class="hero__title">
+        Seu setup.<br />
+        <span class="hero__title-accent">Sem limites.</span>
+      </h1>
 
-        <div class="hero__float hero__float--1">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12z"/>
-          </svg>
-        </div>
-        <div class="hero__float hero__float--2">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M15 7.5V2H9v5.5l3 3 3-3zM7.5 9H2v6h5.5l3-3-3-3zM9 16.5V22h6v-5.5l-3-3-3 3zM16.5 9l-3 3 3 3H22V9h-5.5z"/>
-          </svg>
-        </div>
-        <div class="hero__float hero__float--3">⚡</div>
+      <p class="hero__desc">
+        PCs personalizados de alta performance, figures colecionáveis 
+        e tecnologia premium — montado sob medida pra você.
+      </p>
+
+      <div class="hero__actions">
+        <a href="#contato" class="btn btn--primary">
+          Montar meu PC
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#showcase" class="btn btn--ghost">Explorar galeria</a>
       </div>
     </div>
 
-    <div class="hero__scroll">
-      <span>scroll</span>
+    <!-- Bottom stats bar — MSI-inspired -->
+    <div class="hero__bar" :class="{ loaded }">
+      <div class="hero__bar-inner">
+        <div class="hero__stat">
+          <span class="hero__stat-num">500+</span>
+          <span class="hero__stat-label">PCs Entregues</span>
+        </div>
+        <div class="hero__stat-sep"></div>
+        <div class="hero__stat">
+          <span class="hero__stat-num">RTX 50</span>
+          <span class="hero__stat-label">Última Geração</span>
+        </div>
+        <div class="hero__stat-sep"></div>
+        <div class="hero__stat">
+          <span class="hero__stat-num">100%</span>
+          <span class="hero__stat-label">Personalizado</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll cue -->
+    <div class="hero__scroll" :class="{ loaded }">
       <div class="hero__scroll-line"></div>
     </div>
   </section>
@@ -114,343 +71,192 @@ onMounted(() => {
 .hero {
   min-height: 100vh;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: center;
   position: relative;
-  padding: 7rem $spacing-md $spacing-lg;
-  background: $deep-black;
+  padding: 8rem 0 0;
+  background: $true-black;
   overflow: hidden;
 
-  &__bg {
+  &__backdrop {
     position: absolute;
     inset: 0;
     pointer-events: none;
   }
 
-  &__grid {
+  &__gradient-top {
     position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba($neon-blue, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba($neon-blue, 0.03) 1px, transparent 1px);
-    background-size: 60px 60px;
-    mask-image: radial-gradient(ellipse at 50% 50%, black 20%, transparent 70%);
+    top: -20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120%;
+    height: 70%;
+    background: radial-gradient(ellipse at 50% 20%, rgba($accent, 0.04) 0%, transparent 65%);
   }
 
-  &__glow {
+  &__gradient-bottom {
     position: absolute;
-    border-radius: 50%;
-    filter: blur(120px);
-    animation: pulse-glow 6s ease-in-out infinite;
-
-    &--1 {
-      top: -10%;
-      left: 30%;
-      width: 500px;
-      height: 500px;
-      background: rgba($neon-blue, 0.12);
-    }
-
-    &--2 {
-      bottom: -15%;
-      right: 20%;
-      width: 400px;
-      height: 400px;
-      background: rgba(99, 102, 241, 0.08);
-      animation-delay: 3s;
-    }
-  }
-
-  &__scanline {
-    position: absolute;
+    bottom: 0;
     left: 0;
-    width: 100%;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, rgba($neon-blue, 0.15), transparent);
-    animation: scan-line 8s linear infinite;
-    opacity: 0.5;
+    right: 0;
+    height: 40%;
+    background: linear-gradient(to top, $true-black, transparent);
   }
 
   &__content {
-    max-width: $xl-desktop;
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1.1fr 0.9fr;
-    gap: $spacing-lg;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
+    text-align: center;
+    padding: 0 clamp(1.5rem, 4vw, 4rem);
     position: relative;
     z-index: 1;
     opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
+    transform: translateY(30px);
+    transition: opacity 1s ease, transform 1s cubic-bezier(0.16, 1, 0.3, 1);
 
-    &.visible {
+    &.loaded {
       opacity: 1;
       transform: translateY(0);
     }
-
-    @media (max-width: $desktop) {
-      grid-template-columns: 1fr;
-      text-align: center;
-      gap: $spacing-md;
-    }
   }
 
-  &__text {
+  &__eyebrow {
     display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+
+    span {
+      font-family: $font-mono;
+      font-size: $font-size-xs;
+      color: $gray-400;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+    }
   }
 
-  &__badge {
-    display: inline-flex;
-    align-items: center;
-    gap: $spacing-xs;
-    background: rgba($neon-blue, 0.08);
-    border: 1px solid rgba($neon-blue, 0.2);
-    padding: 0.4rem 1rem;
-    border-radius: $radius-full;
-    font-family: $mono;
-    font-size: $font-size-xs;
-    font-weight: 500;
-    color: $neon-blue;
-    width: fit-content;
-    letter-spacing: 0.04em;
-
-    @media (max-width: $desktop) {
-      margin: 0 auto;
-    }
-
-    &-dot {
-      width: 7px;
-      height: 7px;
-      background: #22c55e;
-      border-radius: 50%;
-      animation: blink 2s ease-in-out infinite;
-    }
+  &__line {
+    width: 40px;
+    height: 1px;
+    background: $gray-600;
   }
 
   &__title {
-    font-size: clamp($font-size-4xl, 5.5vw, $font-size-6xl);
-    font-weight: 900;
-    line-height: 1.05;
+    font-family: $font-display;
+    font-size: $font-size-hero;
+    font-weight: 700;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
     color: $white;
-    letter-spacing: -0.03em;
-  }
+    margin-bottom: 2rem;
 
-  &__subtitle {
-    font-size: $font-size-lg;
-    color: $gray;
-    line-height: 1.8;
-    max-width: 520px;
-
-    @media (max-width: $desktop) {
-      margin: 0 auto;
+    &-accent {
+      color: $gray-300;
     }
   }
 
-  &__stats {
+  &__desc {
+    font-size: clamp($font-size-base, 1.5vw, $font-size-lg);
+    color: $gray-500;
+    line-height: 1.8;
+    max-width: 480px;
+    margin-bottom: 3rem;
+  }
+
+  &__actions {
     display: flex;
     align-items: center;
-    gap: $spacing-md;
-    padding: $spacing-sm 0;
-
-    @media (max-width: $desktop) {
-      justify-content: center;
-    }
+    gap: 2rem;
 
     @media (max-width: $mobile) {
-      gap: $spacing-sm;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+  }
+
+  // Bottom bar
+  &__bar {
+    border-top: 1px solid $border;
+    padding: 1.5rem 0;
+    position: relative;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.8s ease 0.5s;
+
+    &.loaded { opacity: 1; }
+
+    &-inner {
+      max-width: $xl-desktop;
+      margin: 0 auto;
+      padding: 0 clamp(1.5rem, 4vw, 4rem);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3rem;
+
+      @media (max-width: $mobile) {
+        gap: 1.5rem;
+      }
     }
   }
 
   &__stat {
     display: flex;
     flex-direction: column;
-    gap: 2px;
-
-    &-value {
-      font-size: $font-size-xl;
-      font-weight: 800;
-      color: $white;
-    }
-
-    &-label {
-      font-size: $font-size-xs;
-      color: rgba($white, 0.5);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      font-family: $mono;
-    }
-
-    &-divider {
-      width: 1px;
-      height: 36px;
-      background: rgba($white, 0.12);
-
-      @media (max-width: $mobile) {
-        display: none;
-      }
-    }
-  }
-
-  &__actions {
-    display: flex;
-    gap: $spacing-sm;
-    flex-wrap: wrap;
-
-    @media (max-width: $desktop) {
-      justify-content: center;
-    }
-
-    @media (max-width: $mobile) {
-      flex-direction: column;
-    }
-  }
-
-  // Right visual
-  &__visual {
-    display: flex;
-    justify-content: center;
     align-items: center;
-    position: relative;
+    gap: 3px;
 
-    @media (max-width: $desktop) {
-      order: -1;
-      margin-bottom: $spacing-sm;
-    }
-  }
-
-  &__card {
-    position: relative;
-    width: 320px;
-    padding: 2.5rem 2rem;
-    background: linear-gradient(145deg, rgba($surface-elevated, 0.9), rgba($surface, 0.6));
-    border: 1px solid rgba($neon-blue, 0.15);
-    border-radius: $radius-xl;
-    backdrop-filter: blur(20px);
-
-    @media (max-width: $mobile) {
-      width: 260px;
-      padding: 2rem 1.5rem;
-    }
-
-    &-content {
-      position: relative;
-      z-index: 1;
-    }
-
-    &-icon {
-      font-size: 3rem;
-      margin-bottom: 1rem;
+    &-num {
+      font-family: $font-display;
+      font-size: $font-size-lg;
+      font-weight: 700;
+      color: $white;
+      letter-spacing: -0.01em;
     }
 
     &-label {
-      font-family: $mono;
-      font-size: $font-size-xs;
-      font-weight: 700;
-      color: $neon-blue;
-      letter-spacing: 0.2em;
-      margin-bottom: 1.5rem;
+      font-family: $font-mono;
+      font-size: 0.6rem;
+      color: $gray-500;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
     }
 
-    &-specs {
-      display: flex;
-      flex-direction: column;
-      gap: 0.8rem;
-    }
-
-    &-glow {
-      position: absolute;
-      inset: -1px;
-      border-radius: $radius-xl;
-      background: linear-gradient(135deg, rgba($neon-blue, 0.2), transparent 50%, rgba(99, 102, 241, 0.15));
-      z-index: 0;
-      filter: blur(1px);
+    &-sep {
+      width: 1px;
+      height: 28px;
+      background: $border;
     }
   }
 
-  &__float {
-    position: absolute;
-    padding: 0.75rem;
-    background: rgba($surface-elevated, 0.85);
-    border: 1px solid rgba($neon-blue, 0.2);
-    border-radius: $radius-md;
-    color: $neon-blue;
-    animation: float 5s ease-in-out infinite;
-    backdrop-filter: blur(10px);
-
-    &--1 {
-      top: 10px;
-      right: -20px;
-      animation-delay: 0s;
-    }
-
-    &--2 {
-      bottom: 50px;
-      left: -10px;
-      animation-delay: 1.5s;
-    }
-
-    &--3 {
-      bottom: -10px;
-      right: 40px;
-      animation-delay: 3s;
-      font-size: 1.2rem;
-    }
-  }
-
+  // Scroll indicator
   &__scroll {
     position: absolute;
-    bottom: $spacing-md;
+    bottom: 5rem;
     left: 50%;
     transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    color: rgba($white, 0.3);
-    font-family: $mono;
-    font-size: $font-size-xs;
-    letter-spacing: 0.15em;
+    opacity: 0;
+    transition: opacity 0.6s ease 1s;
+
+    &.loaded { opacity: 1; }
 
     &-line {
       width: 1px;
-      height: 40px;
-      background: linear-gradient(to bottom, rgba($neon-blue, 0.5), transparent);
-      animation: scrollPulse 2.5s ease-in-out infinite;
+      height: 48px;
+      background: linear-gradient(to bottom, rgba($white, 0.3), transparent);
+      animation: scrollDown 2s ease-in-out infinite;
     }
 
-    @media (max-width: $tablet) {
-      display: none;
-    }
+    @media (max-width: $tablet) { display: none; }
   }
 }
 
-.spec-line {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  font-size: $font-size-sm;
-  color: rgba($white, 0.7);
-  font-weight: 500;
-}
-
-.spec-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: $neon-blue;
-  box-shadow: 0 0 8px $accent-glow;
-}
-
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
-}
-
-@keyframes scrollPulse {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 0.8; }
+@keyframes scrollDown {
+  0% { opacity: 0.2; transform: scaleY(0.5); transform-origin: top; }
+  50% { opacity: 0.6; transform: scaleY(1); }
+  100% { opacity: 0.2; transform: scaleY(0.5); transform-origin: bottom; }
 }
 </style>

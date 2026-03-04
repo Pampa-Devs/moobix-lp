@@ -2,81 +2,80 @@
 import { ref, onMounted } from 'vue'
 
 const visible = ref(false)
-const observer = ref(null)
-const sectionRef = ref(null)
+const el = ref(null)
 
 const categories = [
   {
-    icon: '🖥️',
+    id: 'pc',
     title: 'PCs Personalizados',
-    desc: 'Do entry-level ao high-end, montamos seu PC sob medida com os melhores componentes do mercado.',
-    tags: ['Entry Level', 'Mid Range', 'High End', 'Workstation'],
-    accent: '#00d4ff'
+    subtitle: 'Entry Level ao High End',
+    desc: 'Montamos do zero com os melhores componentes. Gaming, trabalho ou streaming.',
+    icon: '🖥️',
+    gradient: 'linear-gradient(135deg, #0a1628 0%, #0d1117 100%)'
   },
   {
-    icon: '🦸',
+    id: 'figures',
     title: 'Figures & Hot Toys',
-    desc: 'Coleção premium de action figures e Hot Toys para os verdadeiros entusiastas.',
-    tags: ['Hot Toys', 'Action Figures', 'Colecionáveis'],
-    accent: '#f472b6'
+    subtitle: 'Coleção Premium',
+    desc: 'Action figures e Hot Toys de alta fidelidade para colecionadores exigentes.',
+    icon: '🦸',
+    gradient: 'linear-gradient(135deg, #1a0f0f 0%, #0d1117 100%)'
   },
   {
+    id: 'tech',
+    title: 'Tech & VR',
+    subtitle: 'Última Geração',
+    desc: 'Apple Vision Pro, MetaQuest, displays imersivos e o futuro da tecnologia.',
     icon: '🥽',
-    title: 'Tech & Gadgets',
-    desc: 'Apple Vision Pro, Meta Quest, displays imersivos e o que há de mais moderno em tecnologia.',
-    tags: ['Apple Vision', 'MetaQuest', 'VR/AR', 'Displays'],
-    accent: '#a78bfa'
+    gradient: 'linear-gradient(135deg, #0f0a1a 0%, #0d1117 100%)'
   },
   {
-    icon: '📱',
+    id: 'acessorios',
     title: 'Acessórios',
-    desc: 'Periféricos, capas, cabos e acessórios de celular com qualidade garantida.',
-    tags: ['Celular', 'Periféricos', 'Cabos', 'Cases'],
-    accent: '#34d399'
+    subtitle: 'Celular & Periféricos',
+    desc: 'Cases, cabos, periféricos gamers e tudo pra completar seu setup.',
+    icon: '📱',
+    gradient: 'linear-gradient(135deg, #0a1a0f 0%, #0d1117 100%)'
   }
 ]
 
 onMounted(() => {
-  observer.value = new IntersectionObserver(
-    ([entry]) => {
-      if (entry.isIntersecting) visible.value = true
-    },
-    { threshold: 0.15 }
-  )
-  if (sectionRef.value) observer.value.observe(sectionRef.value)
+  const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) visible.value = true }, { threshold: 0.1 })
+  if (el.value) obs.observe(el.value)
 })
 </script>
 
 <template>
-  <section id="categorias" class="categories section" ref="sectionRef">
+  <section id="categorias" class="categories section" ref="el">
     <div class="container">
-      <div class="categories__header" :class="{ visible }">
-        <span class="section__label">// categorias</span>
-        <h2 class="section__title">
-          Tudo que você precisa,<br />
-          <span class="neon-text">num só lugar.</span>
+      <div class="categories__head reveal" :class="{ visible }">
+        <span class="section-label">Produtos</span>
+        <h2 class="heading-lg">
+          Descubra o<br />universo Moobix.
         </h2>
-        <p class="section__subtitle">
-          De PCs gamers customizados a figures colecionáveis e tech de última geração.
-        </p>
       </div>
 
       <div class="categories__grid">
-        <div
+        <a
           v-for="(cat, i) in categories"
-          :key="i"
-          class="cat-card"
-          :class="{ visible }"
-          :style="{ '--delay': `${i * 0.12}s`, '--accent': cat.accent }"
+          :key="cat.id"
+          href="#contato"
+          class="cat reveal"
+          :class="[`stagger-${i + 1}`, { visible }]"
         >
-          <div class="cat-card__icon">{{ cat.icon }}</div>
-          <h3 class="cat-card__title">{{ cat.title }}</h3>
-          <p class="cat-card__desc">{{ cat.desc }}</p>
-          <div class="cat-card__tags">
-            <span v-for="tag in cat.tags" :key="tag" class="cat-card__tag">{{ tag }}</span>
+          <div class="cat__visual" :style="{ background: cat.gradient }">
+            <span class="cat__icon">{{ cat.icon }}</span>
           </div>
-          <div class="cat-card__shine"></div>
-        </div>
+          <div class="cat__body">
+            <span class="cat__eyebrow">{{ cat.subtitle }}</span>
+            <h3 class="cat__title">{{ cat.title }}</h3>
+            <p class="cat__desc">{{ cat.desc }}</p>
+            <span class="cat__link">
+              Saiba mais
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </span>
+          </div>
+        </a>
       </div>
     </div>
   </section>
@@ -86,109 +85,102 @@ onMounted(() => {
 @use '../../styles/variables' as *;
 
 .categories {
-  background: $black;
-  padding: $spacing-xl 0;
+  padding: $spacing-2xl 0;
+  background: $true-black;
 
-  &__header {
+  &__head {
     margin-bottom: $spacing-lg;
-    opacity: 0;
-    transform: translateY(25px);
-    transition: all 0.7s ease;
-
-    &.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
   }
 
   &__grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.5rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: $border;
+    border: 1px solid $border;
 
-    @media (max-width: $desktop) {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
-    @media (max-width: $mobile) {
+    @media (max-width: $tablet) {
       grid-template-columns: 1fr;
     }
   }
 }
 
-.cat-card {
-  position: relative;
-  background: $surface;
-  border: 1px solid $border;
-  border-radius: $radius-lg;
-  padding: 2rem 1.5rem;
+.cat {
+  display: flex;
+  flex-direction: column;
+  background: $true-black;
+  text-decoration: none;
+  transition: all $transition-base;
   overflow: hidden;
-  transition: all 0.4s ease;
-  opacity: 0;
-  transform: translateY(30px);
-
-  &.visible {
-    opacity: 1;
-    transform: translateY(0);
-    transition-delay: var(--delay);
-  }
 
   &:hover {
-    border-color: var(--accent);
-    transform: translateY(-4px);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(var(--accent), 0.08);
+    .cat__visual { transform: scale(1.02); }
+    .cat__link { color: $white; gap: 0.6rem; }
+  }
 
-    .cat-card__shine {
-      opacity: 1;
+  &__visual {
+    aspect-ratio: 16 / 9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform $transition-slow;
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 60%, $true-black);
     }
   }
 
   &__icon {
-    font-size: 2.5rem;
-    margin-bottom: 1.2rem;
+    font-size: 4rem;
+    position: relative;
+    z-index: 1;
+    filter: drop-shadow(0 0 30px rgba(0,0,0,0.5));
+  }
+
+  &__body {
+    padding: 1.8rem 2rem 2.2rem;
+  }
+
+  &__eyebrow {
+    font-family: $font-mono;
+    font-size: $font-size-xs;
+    color: $gray-500;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    display: block;
+    margin-bottom: 0.6rem;
   }
 
   &__title {
-    font-size: $font-size-lg;
-    font-weight: 700;
+    font-family: $font-display;
+    font-size: $font-size-2xl;
+    font-weight: 600;
     color: $white;
-    margin-bottom: 0.6rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.01em;
   }
 
   &__desc {
     font-size: $font-size-sm;
-    color: $gray;
+    color: $gray-500;
     line-height: 1.7;
     margin-bottom: 1.2rem;
+    max-width: 360px;
   }
 
-  &__tags {
-    display: flex;
-    flex-wrap: wrap;
+  &__link {
+    display: inline-flex;
+    align-items: center;
     gap: 0.4rem;
-  }
-
-  &__tag {
-    font-family: $mono;
-    font-size: 0.65rem;
+    font-size: $font-size-sm;
     font-weight: 500;
-    color: var(--accent);
-    background: rgba(0, 212, 255, 0.06);
-    border: 1px solid rgba(0, 212, 255, 0.12);
-    padding: 0.25rem 0.6rem;
-    border-radius: $radius-full;
-    letter-spacing: 0.03em;
-  }
-
-  &__shine {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--accent), transparent);
-    opacity: 0;
-    transition: opacity $transition-base;
+    color: $gray-400;
+    transition: all $transition-base;
   }
 }
 </style>
